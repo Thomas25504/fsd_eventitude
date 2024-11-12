@@ -10,6 +10,7 @@ const create = (req, res) => {
     if(error){
         return res.status(400).send({error_message: error.details[0].message});
     }
+    
     else{
         users.insert(user, (err, id) => {
 
@@ -24,7 +25,17 @@ const create = (req, res) => {
 };
 
 const login = (req, res) => {
-    return res.sendStatus(500);
+    users.check_user(req.body, (err, user) => {
+        if(err){
+            return res.status(500);
+        }
+        if(user){
+            return res.status(200).send({user_id: user.id});
+        }else{
+            return res.status(401).send({error_message: 'Invalid email or password'});
+        }
+    }
+    );
 };
 
 const logout = (req, res) => {

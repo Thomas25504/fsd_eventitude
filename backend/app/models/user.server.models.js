@@ -20,6 +20,22 @@ const insert = function(user, done){
     });
 };
 
+const check_user = function(user, done){
+    db.get('SELECT * FROM users WHERE email = ?', [user.email], (err, row) => {
+        if(err){
+            return done(err);
+        }
+        if(row){
+            let hash = getHash(user.password, Buffer.from(row.salt, 'hex'));
+            if(hash === row.password){
+                return done(null, row);
+            }
+        }
+        return done(null, null);
+    });
+};
+
 module.exports = {
-    insert: insert
+    insert: insert,
+    check_user: check_user
 };
