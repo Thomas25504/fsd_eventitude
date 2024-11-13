@@ -21,8 +21,8 @@ const insert = function(user, done){
 
 const authenticateUser = function(email, password, done){
     db.get('SELECT user_id, password FROM users WHERE email = ?', [email], function(err, row){
-        if(err){
-            return done(err);
+        if(err || row === undefined){
+            return done(true);
         }
         else{
             return done(null, row.user_id);

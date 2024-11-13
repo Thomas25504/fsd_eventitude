@@ -27,7 +27,7 @@ const create = (req, res) => {
 const login = (req, res) => {
     users.authenticateUser(req.body.email, req.body.password, (err, id) => {
         if(err){
-            return res.status(400).json({error_message: err.message});
+            return res.status(400).send({error_message: err.message});
         }
         else{
             users.getSessionToken(id, (err, token) => {
@@ -51,7 +51,7 @@ const login = (req, res) => {
                     
                 }
             });
-        }    
+        }  
     });
 }
 
