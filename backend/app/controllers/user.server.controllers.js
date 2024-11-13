@@ -8,14 +8,14 @@ const create = (req, res) => {
     const {error} = validator.validate(user);
 
     if(error){
-        return res.status(400).send({error_message: error.details[0].message});
+        return res.status(400).json({error_message: error.details[0].message});
     }
     
     else{
         users.insert(user, (err, id) => {
 
             if(err){
-                return res.status(500);
+                return res.status(400).send({error_message: err.message});
             }else{
                 return res.status(201).send({user_id: id});
             }
@@ -25,18 +25,35 @@ const create = (req, res) => {
 };
 
 const login = (req, res) => {
-    users.check_user(req.body, (err, user) => {
+    users.authenticateUser(req.body.email, req.body.password, (err, id) => {
         if(err){
-            return res.status(500);
+            return res.status(400).json({error_message: err.message});
         }
-        if(user){
-            return res.status(200).send({user_id: user.id});
-        }else{
-            return res.status(401).send({error_message: 'Invalid email or password'});
-        }
-    }
-    );
-};
+        else{
+            users.getSessionToken(id, (err, token) => {
+                if(err){
+                    return res.status(400).send({error_message: err.message});
+                }
+                else{
+                    if(token !== null){
+                        return res.status(200).send({user_id: id, session_token: token});
+                    }
+                    else{
+                        users.setSessionToken(id, (err, token) => {
+                            if(err){
+                                return res.status(400).send({error_message: err.message});
+                            }
+                            else{
+                                return res.status(200).send({user_id: id, session_token: token});
+                            }
+                        });
+                    }
+                    
+                }
+            });
+        }    
+    });
+}
 
 const logout = (req, res) => {
     return res.sendStatus(500);
