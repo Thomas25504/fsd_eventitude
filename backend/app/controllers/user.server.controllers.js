@@ -25,10 +25,7 @@ const create = (req, res) => {
 };
 
 const login = (req, res) => {
-    let username = req.body.email;
-    let password = req.body.password;
-    
-    if(!validator.validate(username, password)){
+    if(!validator.validate(req.body)){
         return res.status(400).send({error_message: err});
     }
     else{
@@ -65,7 +62,7 @@ const login = (req, res) => {
 }
 
 const logout = (req, res) => {
-    return res.sendStatus(500);
+    return res.status(200).send({message: 'Logged out successfully'});
 }
 
 module.exports = {
