@@ -25,34 +25,43 @@ const create = (req, res) => {
 };
 
 const login = (req, res) => {
-    users.authenticateUser(req.body.email, req.body.password, (err, id) => {
-        if(err){
-            return res.status(400).send({error_message: err.message});
-        }
-        else{
-            users.getSessionToken(id, (err, token) => {
-                if(err){
-                    return res.status(400).send({error_message: err.message});
-                }
-                else{
-                    if(token !== null){
-                        return res.status(200).send({user_id: id, session_token: token});
+    let username = req.body.email;
+    let password = req.body.password;
+    
+    if(!validator.validate(username, password)){
+        return res.status(400).send({error_message: err});
+    }
+    else{
+        users.authenticateUser(req.body.email, req.body.password, (err, id) => {
+            if(err){
+                return res.status(400).send({error_message: err});
+            }
+            else{
+                users.getSessionToken(id, (err, token) => {
+                    if(err){
+                        return res.status(400).send({error_message: err.message});
                     }
                     else{
-                        users.setSessionToken(id, (err, token) => {
-                            if(err){
-                                return res.status(400).send({error_message: err.message});
-                            }
-                            else{
-                                return res.status(200).send({user_id: id, session_token: token});
-                            }
-                        });
+                        if(token !== null){
+                            return res.status(200).send({user_id: id, session_token: token});
+                        }
+                        else{
+                            users.setSessionToken(id, (err, token) => {
+                                if(err){
+                                    return res.status(400).send({error_message: err.message});
+                                }
+                                else{
+                                    return res.status(200).send({user_id: id, session_token: token});
+                                }
+                            });
+                        }
+                        
                     }
-                    
-                }
-            });
-        }  
-    });
+                });
+            }  
+        });
+    }
+    
 }
 
 const logout = (req, res) => {

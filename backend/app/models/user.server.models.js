@@ -20,12 +20,23 @@ const insert = function(user, done){
 };
 
 const authenticateUser = function(email, password, done){
-    db.get('SELECT user_id, password FROM users WHERE email = ?', [email], function(err, row){
-        if(err || row === undefined){
+    db.get('SELECT user_id, password, salt FROM users WHERE email = ?', [email], function(err, id){
+        if(err || id === undefined || password === undefined){
             return done(true);
         }
         else{
-            return done(null, row.user_id);
+            if(id.user_salt == null){
+                id.user_salt = '';
+            }
+
+            let salt = Buffer.from(id.salt, 'hex');
+
+            if(id.password === getHash(password, salt)){
+                return done(null, id.user_id);
+            }
+            else{
+                return done(true);
+            }
         }
     })
 };
@@ -42,12 +53,12 @@ const setSessionToken = function(user_id, done){
 };
 
 const getSessionToken = function(user_id, done){
-    db.get('SELECT session_token FROM users WHERE user_id = ?', [user_id], function(err, row){
+    db.get('SELECT session_token FROM users WHERE user_id = ?', [user_id], function(err, id){
         if(err){
             return done(err);
         }
         else{
-            return done(null, row.session_token);
+            return done(null, id.session_token);
         }
     });
 }
