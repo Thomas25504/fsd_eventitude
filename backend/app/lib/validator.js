@@ -8,16 +8,8 @@ const userSchema = Joi.object({
     .max(30)
     .pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$/)
     .required(),
-}).unknown(false);
-
-
-/*const validate = (user) => {
-    if(userSchema.validate(user).error){
-        return {error: userSchema.validate(user).error};
-    }
-
-    return {value: userSchema.validate(user).value};
-}*/
+  
+});
 
 const validate = (user) => {
     const { value, error } = userSchema.validate(user, { abortEarly: false });
