@@ -35,8 +35,8 @@ const create = (req, res) => {
 // Login a user
 const login = (req, res) => {
     // Validating the user object
-    if(!validator.validateUser(req.body)){
-        return res.status(400).send({error_message: err});
+    if(validator.validateUserLogin(req.body).error){
+        return res.status(400).send({error_message: 'Invalid email or password'});
     }
     // If the user object is valid, authenticate the user
     else{

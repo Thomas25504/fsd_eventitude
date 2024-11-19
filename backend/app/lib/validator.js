@@ -32,6 +32,18 @@ const validateUser = (user) => {
     }
 }
 
+const validateUserLogin = (user) => {
+    const loginSchema = Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().min(6).max(30).required()
+    }).unknown(false);
+    if(loginSchema.validate(user).error){
+        return {error: loginSchema.validate(user).error};
+    }else{
+        return {error: null};
+    }
+}
+
 const validateEvent = (event) => {
     if(eventSchema.validate(event).error){
         return {error: eventSchema.validate(event).error};
@@ -45,5 +57,6 @@ const validateEvent = (event) => {
 // Export the module
 module.exports = {
     validateUser: validateUser,
+    validateUserLogin: validateUserLogin,
     validateEvent: validateEvent
 };
