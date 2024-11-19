@@ -1,5 +1,7 @@
+// Desc: Joi schema for user validation
 const Joi = require('joi');
 
+// Define the schema
 const userSchema = Joi.object({
     first_name: Joi.string().required(),
     last_name: Joi.string().required(),
@@ -9,22 +11,39 @@ const userSchema = Joi.object({
     .pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$/)
     .required(),
   
-});
+}).unknown(false);
 
-const validate = (user) => {
-    const { value, error } = userSchema.validate(user, { abortEarly: false });
-        
-    if (error) {
-        return {error: error};
+const eventSchema = Joi.object({
+    name: Joi.string().required(),
+    description: Joi.string().required(),
+    location: Joi.string().required(),
+    start: Joi.date().required(),
+    close_registration: Joi.date().required(),
+    max_attendees: Joi.number().integer().required(),
+    creator_id: Joi.number().integer()
+})
+
+// Validate the user object
+const validateUser = (user) => {
+    if(userSchema.validate(user).error){
+        return {error: userSchema.validate(user).error};
     }else{
-        return {value: value};
+        return {error: null};
     }
-    
-};
+}
+
+const validateEvent = (event) => {
+    if(eventSchema.validate(event).error){
+        return {error: eventSchema.validate(event).error};
+    }else{
+        return {error: null};
+    }
+}
  
 
 
-
+// Export the module
 module.exports = {
-    validate: validate
+    validateUser: validateUser,
+    validateEvent: validateEvent
 };
