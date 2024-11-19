@@ -13,6 +13,7 @@ const userSchema = Joi.object({
   
 }).unknown(false);
 
+// Define the schema for user login
 const eventSchema = Joi.object({
     name: Joi.string().required(),
     description: Joi.string().required(),
@@ -32,6 +33,7 @@ const validateUser = (user) => {
     }
 }
 
+// Validate the user login object
 const validateUserLogin = (user) => {
     const loginSchema = Joi.object({
         email: Joi.string().email().required(),
@@ -44,6 +46,7 @@ const validateUserLogin = (user) => {
     }
 }
 
+// Validate the event object
 const validateEvent = (event) => {
     if(eventSchema.validate(event).error){
         return {error: eventSchema.validate(event).error};

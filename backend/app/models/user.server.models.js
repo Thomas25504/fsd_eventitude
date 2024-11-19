@@ -1,10 +1,13 @@
+// Import the database configuration
 const db = require('../../config/database');
 const crypto = require('crypto');
 
+// Get the hash of a password
 const getHash = function(password, salt){
     return crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
 }
 
+// Insert a new user
 const insert = function(user, done){
     let salt = crypto.randomBytes(64);
     let hash = getHash(user.password, salt);
@@ -19,6 +22,7 @@ const insert = function(user, done){
     });
 };
 
+// Authenticate a user
 const authenticateUser = function(email, password, done){
     db.get('SELECT user_id, password, salt FROM users WHERE email = ?', [email], function(err, id){
         if(err || id === undefined || password === undefined){
@@ -41,6 +45,7 @@ const authenticateUser = function(email, password, done){
     })
 };
 
+// Set the session token for a user
 const setSessionToken = function(user_id, done){
     let token = crypto.randomBytes(16).toString('hex');
 
@@ -52,6 +57,7 @@ const setSessionToken = function(user_id, done){
     })
 };
 
+// Get the session token for a user
 const getSessionToken = function(user_id, done){
     db.get('SELECT session_token FROM users WHERE user_id = ?', [user_id], function(err, id){
         if(err){
@@ -63,6 +69,7 @@ const getSessionToken = function(user_id, done){
     });
 }
 
+// Remove the session token for a user
 const removeToken = function(token, done){
     db.run('UPDATE users SET session_token = NULL WHERE session_token = ?', [token], function(err){
         return done(err);
@@ -70,6 +77,7 @@ const removeToken = function(token, done){
 }
 
 
+// Export the module
 module.exports = {
     insert: insert,
     authenticateUser: authenticateUser,
