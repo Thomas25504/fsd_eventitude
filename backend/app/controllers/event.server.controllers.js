@@ -25,7 +25,7 @@ const getEvent = (req, res) => {
 };
 
 const updateEvent = (req, res) => {
-    return res.sendStatus(500);
+    return res.sendStatus(401);
 };
 
 const deleteEvent = (req, res) => {
