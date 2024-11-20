@@ -76,7 +76,7 @@ const login = (req, res) => {
 
 // Logout a user
 const logout = (req, res) => {
-    return res.status(200).send({message: 'User logged out'});
+    return res.status(200).send({message: 'User logged out successfully'});
 }
 
 // Exporting the functions
