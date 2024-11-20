@@ -18,9 +18,9 @@ const eventSchema = Joi.object({
     name: Joi.string().required(),
     description: Joi.string().required(),
     location: Joi.string().required(),
-    start: Joi.date().required(),
-    close_registration: Joi.date().required(),
-    max_attendees: Joi.number().integer().required(),
+    start: Joi.date().min('now').required(),
+    close_registration: Joi.date().max(Joi.ref('start')).min('now').required(),
+    max_attendees: Joi.number().integer().min(1).required(),
     creator_id: Joi.number().integer()
 })
 
