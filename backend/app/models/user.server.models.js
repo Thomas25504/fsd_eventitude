@@ -76,6 +76,18 @@ const removeToken = function(token, done){
     })
 }
 
+const getIdFromToken = function(token, done){
+    const sql = 'SELECT user_id FROM users WHERE session_token = ?';
+    const params = [token];
+    db.run(sql, params, function(err, id){
+        if(err || id === undefined){
+            return done(true, null);
+        }
+        else{
+            return done(null, id.user_id);
+        }
+    });
+}
 
 // Export the module
 module.exports = {
@@ -83,5 +95,6 @@ module.exports = {
     authenticateUser: authenticateUser,
     setSessionToken: setSessionToken,
     getSessionToken: getSessionToken,
-    removeToken: removeToken
+    removeToken: removeToken,
+    getIdFromToken: getIdFromToken
 };

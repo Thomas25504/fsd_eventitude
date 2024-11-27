@@ -76,12 +76,12 @@ const login = (req, res) => {
 
 // Logout a user
 const logout = (req, res) => {
-    return res.status(200).send({message: 'User logged out successfully'});
+    return res.status(200).send({message: 'Logged out'});
 }
 
 // Exporting the functions
 module.exports = {
     create: create,
     login: login,
-    logout: logout
+    logout: logout,
 }

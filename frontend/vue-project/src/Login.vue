@@ -16,6 +16,7 @@
             <p>{{email + " " + password}}</p>
 
             <button>Login</button>
+            <div v-if = "error">{{error}}</div>
         </form>
     </div>
 </template>
@@ -32,14 +33,25 @@ export default {
     methods: {
       handleSubmit(e){
         this.submitted = true
+
+
         const { email, password } = this
 
         if(email && password){
             return;
         }
 
-        alert('Form submitted')
-      }
+        if(!(Emailvalidator.validate(email))){
+            this.error = 'Invalid email'
+            return;
+        }
+
+        const password_pattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$/
+        if(!password_pattern.test(password)){
+            this.error = 'Password not strong enough'
+            return;
+        }
     }
+}
 }
 </script>
