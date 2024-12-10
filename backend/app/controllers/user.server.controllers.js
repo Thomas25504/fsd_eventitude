@@ -76,7 +76,14 @@ const login = (req, res) => {
 
 // Logout a user
 const logout = (req, res) => {
-    return res.status(200).send({message: 'Logged out'});
+    users.removeToken(req.get('X-Authorization'), (err) => {
+        if(err){
+            return res.status(400).send({error_message: err.message});
+        }
+        else{
+            return res.status(200).send({message: 'Logged out successfully'});
+        }
+    });
 }
 
 // Exporting the functions

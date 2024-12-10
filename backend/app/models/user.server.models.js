@@ -72,8 +72,11 @@ const getSessionToken = function(user_id, done){
 // Remove the session token for a user
 const removeToken = function(token, done){
     db.run('UPDATE users SET session_token = NULL WHERE session_token = ?', [token], function(err){
-        return done(err);
-    })
+        if(err){
+            return done(err);
+        }
+        return done(null);
+    });
 }
 
 const getIdFromToken = function(token, done){
