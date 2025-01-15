@@ -2,6 +2,7 @@
 const db = require('../../config/database');
 const crypto = require('crypto');
 
+
 // Get the hash of a password
 const getHash = function(password, salt){
     return crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
@@ -81,9 +82,8 @@ const removeToken = function(token, done){
 
 const getIdFromToken = function(token, done){
     const sql = 'SELECT user_id FROM users WHERE session_token = ?';
-    const params = [token];
-    db.run(sql, params, function(err, id){
-        if(err || id === undefined){
+    db.get(sql, [token], function(err, id){
+        if(err || !id){
             return done(true, null);
         }
         else{
