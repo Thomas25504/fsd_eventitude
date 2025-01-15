@@ -25,7 +25,7 @@ const getEvent = (req, res) => {
 };
 
 const updateEvent = (req, res) => {
-    return res.sendStatus(401);
+    let id = events.getIdParam(req);
 };
 
 const deleteEvent = (req, res) => {

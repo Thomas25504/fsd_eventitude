@@ -11,6 +11,11 @@ const insert = function(event, done){
     });
 };
 
+const getIdParam = function(req){
+    return req.params.event_id;
+};
+
 module.exports = {
-    insert: insert
+    insert: insert,
+    getIdParam: getIdParam
 }

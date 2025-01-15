@@ -1,4 +1,6 @@
 const users = require('../models/user.server.models');
+const events = require('../models/event.server.models');
+const questions = require('../models/event.server.models');
 
 const isAuthenticated = function(req, res, next){
     let token = req.get('X-Authorization');
