@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{welcome_message}}</h1>
+    <h1>{{title}}</h1>
   </div>
 
   <Login />
@@ -13,7 +13,7 @@
   export default {
     data() {
       return {
-        welcome_message: 'Eventitude',
+        title: 'Eventitude',
       }
     },
     methods: {
