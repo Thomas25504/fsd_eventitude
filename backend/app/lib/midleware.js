@@ -6,9 +6,9 @@ const isAuthenticated = function(req, res, next){
     if(!token){
         return res.status(401).send({error_message: 'Unauthorized'});
     }
-    
+
     users.getIdFromToken(token, (err, id) => {
-        if(err){
+        if(err || id === null){
             return res.status(401).send({error_message: 'Unauthorized'});
         }
         next();
