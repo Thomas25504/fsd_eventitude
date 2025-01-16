@@ -1,4 +1,5 @@
 const events = require('../models/event.server.models');
+const users = require('../models/user.server.models');
 const validator = require('../lib/validator');
 
 const create = (req, res) => {
@@ -21,11 +22,19 @@ const create = (req, res) => {
 };
 
 const getEvent = (req, res) => {
-    return res.sendStatus(500);
+    let id = events.getIdParams(req);
+    events.getEventByID(id, (err, row) => {
+        if(err){
+            return res.status(400).send({error_message: err});
+        }
+        else{
+            return res.status(200).send(row);
+        }
+    });
 };
 
 const updateEvent = (req, res) => {
-    return res.sendStatus(401);
+    return res.sendStatus(500);
 };
 
 const deleteEvent = (req, res) => {
