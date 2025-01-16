@@ -24,6 +24,13 @@ const eventSchema = Joi.object({
     creator_id: Joi.number().integer()
 })
 
+const questionSchema = Joi.object({
+    event_id: Joi.number().integer().required(),
+    user_id: Joi.number().integer().required(),
+    content: Joi.string().required(),
+    vote: Joi.number().integer().required()
+}).unknown(false);
+
 // Validate the user object
 const validateUser = (user) => {
     if(userSchema.validate(user).error){
@@ -54,6 +61,15 @@ const validateEvent = (event) => {
         return {error: null};
     }
 }
+
+
+const validateQuestion = (question) => {
+    if(questionSchema.validate(question).error){
+        return {error: questionSchema.validate(question).error};
+    }else{
+        return {error: null};
+    }
+}
  
 
 
@@ -61,5 +77,6 @@ const validateEvent = (event) => {
 module.exports = {
     validateUser: validateUser,
     validateUserLogin: validateUserLogin,
-    validateEvent: validateEvent
+    validateEvent: validateEvent,
+    validateQuestion: validateQuestion,
 };

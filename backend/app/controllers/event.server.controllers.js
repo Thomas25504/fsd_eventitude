@@ -22,19 +22,22 @@ const create = (req, res) => {
 };
 
 const getEvent = (req, res) => {
-    let id = events.getIdParams(req);
+    let id = events.getIdParams(req.body);
     events.getEventByID(id, (err, row) => {
         if(err){
             return res.status(400).send({error_message: err});
-        }
-        else{
-            return res.status(200).send(row);
-        }
-    });
+        }else{
+            return res.status(200).send(row);}
+    })
 };
 
 const updateEvent = (req, res) => {
-    return res.sendStatus(500);
+    let event = Object.assign({}, req.body);
+
+    const {error} = validator.validateEvent(event);
+    if(error){
+        return res.status(400).json({error_message: error.details[0].message});
+    }
 };
 
 const deleteEvent = (req, res) => {

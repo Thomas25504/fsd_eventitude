@@ -1,5 +1,4 @@
 const db = require('../../config/database');
-const { getEvent } = require('../controllers/event.server.controllers');
 
 const insert = function(event, done){
     let values = [event.name, event.description ,event.location, event.start, event.close_registration, event.max_attendees, event.creator_id];
@@ -13,7 +12,7 @@ const insert = function(event, done){
 };
 
 const getIdParams = function(req){
-    return req.params.id;
+    return req.params.event_id;
 };
 
 const getEventByID = function(id, done){
@@ -25,8 +24,19 @@ const getEventByID = function(id, done){
     });
 };
 
+const updateEventByID = function(event, done){
+    let values = [event.name, event.description, event.location, event.start, event.close_registration, event.max_attendees, event.creator_id, event.event_id];
+    db.run('UPDATE events SET name = ?, description = ?, location = ?, start_date = ?, close_registration = ?, max_attendees = ?, creator_id = ? WHERE event_id = ?', values, function(err){
+        if(err){
+            return done(err);
+        }
+        return done(null);
+    });
+}
+
 module.exports = {
     insert: insert,
     getIdParams: getIdParams,
-    getEventByID: getEventByID
+    getEventByID: getEventByID,
+    updateEventByID: updateEventByID
 }
