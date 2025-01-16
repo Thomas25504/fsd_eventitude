@@ -11,10 +11,6 @@ const insert = function(event, done){
     });
 };
 
-const getIdParams = function(req){
-    return req.params.event_id;
-};
-
 const getEventByID = function(id, done){
     db.get('SELECT * FROM events WHERE event_id = ?', id, function(err, row){
         if(err){
@@ -36,7 +32,6 @@ const updateEventByID = function(event, done){
 
 module.exports = {
     insert: insert,
-    getIdParams: getIdParams,
     getEventByID: getEventByID,
     updateEventByID: updateEventByID
 }
