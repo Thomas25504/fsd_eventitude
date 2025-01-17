@@ -24,5 +24,7 @@ const getQuestionByID = function(id, done){
 }
 
 module.exports = {
-    insert: insert
+    insert: insert,
+    getIdParams: getIdParams,
+    getQuestionByID: getQuestionByID,
 };

@@ -1,5 +1,5 @@
-const questions = require('../controllers/question.server.controller');
-const auth = require('../lib/middleware');
+const questions = require('../controllers/question.sever.controllers');
+const auth = require('../lib/midleware');
 
 module.exports = function(app) {
     app.route('/event/:question_id/question').post(auth.isAuthenticated,questions.createQuestion);
