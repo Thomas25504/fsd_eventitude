@@ -12,15 +12,16 @@ const insert = function(event, done){
 };
 
 const getEventByID = function(id, done){
-    db.get('SELECT * FROM events WHERE event_id = ?', id, function(err, row){
+
+    db.get('SELECT * FROM events WHERE event_id = ?', [id], function(err, row){
         if(err){
-            return done(err);
+            return done(err, null);
         }
         return done(null, row);
     });
 };
 
-const updateEventByID = function(event, done){
+const updateEvent = function(event, done){
     let values = [event.name, event.description, event.location, event.start, event.close_registration, event.max_attendees, event.creator_id, event.event_id];
     db.run('UPDATE events SET name = ?, description = ?, location = ?, start_date = ?, close_registration = ?, max_attendees = ?, creator_id = ? WHERE event_id = ?', values, function(err){
         if(err){
@@ -30,8 +31,18 @@ const updateEventByID = function(event, done){
     });
 }
 
+const deleteEvent = function(id, done){
+    db.run('DELETE FROM events WHERE event_id = ?', [id], function(err){
+        if(err){
+            return done(err);
+        }
+        return done(null);
+    });
+};
+
 module.exports = {
     insert: insert,
     getEventByID: getEventByID,
-    updateEventByID: updateEventByID
+    updateEvent: updateEvent,
+    deleteEvent: deleteEvent
 }

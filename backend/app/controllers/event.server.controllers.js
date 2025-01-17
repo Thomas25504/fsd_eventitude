@@ -22,26 +22,53 @@ const create = (req, res) => {
 };
 
 const getEvent = (req, res) => {
-    let id = events.getIdParams(req.body);
-    events.getEventByID(id, (err, row) => {
-        if(err){
-            return res.status(400).send({error_message: err});
-        }else{
-            return res.status(200).send(row);}
-    })
+
+    let id = parseInt(req.params.event_id);
+
+    if(id === undefined){
+        return res.status(400).send({error_message: "Invalid event id"});
+    }else{
+        events.getEventByID(id, (err, row) => {
+            if(err){
+                return res.status(400).send({error_message: err});
+            }else{
+                return res.status(200).json(row);
+            }
+    })}
 };
 
 const updateEvent = (req, res) => {
     let event = Object.assign({}, req.body);
 
     const {error} = validator.validateEvent(event);
+    
     if(error){
         return res.status(400).json({error_message: error.details[0].message});
+    }else{
+        events.updateEvent(event, (err) => {
+            if(err){
+                return res.status(400).send({error_message: err});
+            }else{
+                return res.sendStatus(200);
+            }
+        });
     }
 };
 
 const deleteEvent = (req, res) => {
-    return res.sendStatus(500);
+    let id = parseInt(req.params.event_id);
+
+    events.deleteEvent(id, (err) => {
+        if(id === undefined){
+            return res.status(400).send({error_message: "Invalid event id"});
+        }
+
+        if(err){
+            return res.status(400).send({error_message: err});
+        }else{
+            return res.sendStatus(200);
+        }
+    });
 };
 
 const registerAttendee = (req, res) => {
