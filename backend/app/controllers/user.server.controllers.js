@@ -13,6 +13,7 @@ const create = (req, res) => {
 
     // If the user object is invalid, return an error message
     if(error){
+        console.log("Invalid Object");
         return res.status(400).json({error_message: error.details[0].message});
     }
     
@@ -21,6 +22,7 @@ const create = (req, res) => {
         users.insert(user, (err, id) => {
             // If there is an error, return an error message
             if(err){
+                console.log(err);
                 return res.status(400).send({error_message: err.message});
             }
             // If the user is successfully inserted, return the user id
