@@ -1,40 +1,38 @@
 <template>
     <div>
-        <h1>New Event</h1>
         <form @submit.prevent="handleSubmit">
             <label for="title">Event Name: </label><br/>
-            <input type="text" name="title" v-model="title" placeholder="Title"/>
-            <div v-show="submitted && !title">Title is required</div>
+            <input type="text" name="name" v-model="name" placeholder="Title"/>
+    
 
             <br /><br />
 
             <label for="description">Description: </label>
             <input type="text" name="description" v-model="description" placeholder="Description"/>
-            <div v-show="submitted && !description">Description is required</div>
+
 
             <br /><br />
 
             <label for="startDate"> Start Date: </label>
-            <input type="date" name="date" v-model="date" placeholder="Date"/>
-            <div v-show="submitted && !date">Date is required</div>
+            <input type="date" name="start" v-model="start" placeholder="Date"/>
+
 
             <br /><br />
 
             <label for="closeRegistration">Close Registration: </label>
-            <input type="date" name="date" v-model="date" placeholder="Date"/>
-            <div v-show="submitted && !time">Time is required</div>
+            <input type="date" name="close_registration" v-model="close_registration" placeholder="Date"/>
 
             <br /><br />
 
             <label for="location">Location: </label>
             <input type="text" name="location" v-model="location" placeholder="Location"/>
-            <div v-show="submitted && !location">Location is required</div>
+         
 
             <br /><br />
 
             <label for="maxattendees">Max Atendees: </label>
             <input type="number" name="max_attendees" v-model="max_attendees" placeholder="Max Atendees"/>
-            <div v-show="submitted && !location">Max atendees is required</div>
+         
 
             <br /><br />
 
@@ -44,48 +42,89 @@
     </div>
 </template>
 
+<script>
+    import {postService} from "../../services/posts.service";
+
+    export default {
+        data(){
+            return {
+                name: '',
+                description: '',
+                start: '',
+                close_registration: '',
+                location: '',
+                max_attendees: '',
+                submitted: false
+            }
+        },
+
+        methods:{
+            handleSubmit(e){
+                this.submitted = true;
+                const{ name, description, start, close_registration, location, max_attendees} = this
+              
+
+                postService.createEvent(name, description, start, close_registration, location, max_attendees)
+                    .then(response => {
+                        // handle successful response
+                        console.log('Event Creation successful', response);
+                    })
+                    .catch(error => {
+                        // handle error response
+                        console.error('Creation failed', error);
+                        this.error = 'Creation failed. Please check your credentials and try again.';
+                    });
+            }
+        }
+}
+</script>
+
 <style scoped>
     form {
         max-width: 600px;
         margin: 0 auto;
         padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     label {
-        font-weight: bold;
-        margin-bottom: 5px;
+        font-weight: 600;
+        margin-bottom: 8px;
         display: block;
+        color: #333;
     }
 
     input[type="text"],
     input[type="date"],
     input[type="time"],
     input[type="number"] {
-        width: 95%;
-        padding: 10px;
-        margin-bottom: 10px;
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 16px;
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 4px;
+        box-sizing: border-box;
     }
 
     button {
-        padding: 10px 20px;
+        padding: 12px 24px;
         background-color: #007bff;
-        color: white;
+        color: #fff;
         border: none;
-        border-radius: 5px;
+        border-radius: 4px;
         cursor: pointer;
+        font-size: 16px;
     }
 
     button:hover {
-        background-color: #45a049;
+        background-color: #0056b3;
     }
 
     div {
-        color: red;
-        font-size: 0.9em;
+        color: #e74c3c;
+        font-size: 0.875em;
     }
 </style>

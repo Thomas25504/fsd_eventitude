@@ -3,7 +3,7 @@
   <div>
     <nav>
       <router-link to="/">Home</router-link>
-      <router-link to="/events">Events</router-link>
+      <router-link to="/events">Create Events</router-link>
       <router-link to="/profile">Profile</router-link>      
     </nav>
     <router-view />
@@ -38,34 +38,46 @@ import Profile from './pages/Profile.vue';
 </script>
 
 <style scoped>
-  *{
-    font-family: Arial, sans-serif;
-    background-color: #003B36;
-    
-    
-    
+  * {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
-  nav{
-    background-color: #012622;
-    padding: 10px;
-    margin-bottom: 10px;
+  body {
+    background-color: #f4f4f9;
+    color: #333;
+  }
+
+  nav {
+    background-color: #004d40;
+    padding: 15px 30px;
     display: flex;
-    justify-content: space-between;
-    border-radius: 20px;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
 
-  nav a{
+  nav a {
     color: white;
-    font-size:large;
-    padding: 10px;
-    margin-right: 10px;
+    font-size: 1.1em;
+    padding: 10px 20px;
+    margin: 0 10px;
     text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 5px;
   }
 
-  nav a:hover{
-    background-color: black;
-    color: white;
+  nav a:hover {
+    background-color: #00796b;
+    color: #fff;
+  }
+
+  router-view {
+    padding: 20px;
   }
 
 </style>

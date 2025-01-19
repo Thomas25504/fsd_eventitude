@@ -13,7 +13,7 @@ const ifAuthenticated = (to, from, next) => {
         next();
         return;
     }
-    next("/login");
+    next("/profile");
 }
 
 const routes = [

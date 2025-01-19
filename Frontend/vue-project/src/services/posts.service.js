@@ -1,23 +1,3 @@
-const getEvent = () => {
-    return fetch('http://localhost:3333/search')
-    .then((response) => {
-        if(response.status === 200){
-            return response.json();
-        }else{
-            throw "Something went wrong";
-        }
-    })
-
-    .then((resJson) => {
-        return resJson;
-    })
-
-    .catch((error) => {
-        console.log("Err", error);
-        return Promise.reject(error);
-    })
-}
-
     const getUser = (email, password) => {
         return fetch('http://localhost:3333/login', {
             method: 'POST',
@@ -78,8 +58,67 @@ const logout = () => {
    })
 }
 
+const createUser = (first_name, last_name, email, password) => {
+    return fetch('http://localhost:3333/users', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ first_name, last_name, email, password })
+        })
+        .then((response) => {
+        if(response.status === 201){
+            return response.json();
+        }else if(response.status === 400){
+            throw "Bad Request";
+        }
+        else{
+            throw "Something went wrong";
+        }
+        })
+        .then((resJson) => {
+        window.location.href = '/profile';
+        return resJson;
+        })
+        .catch((error) => {
+        console.log("Err", error);
+        return Promise.reject(error);
+        })
+}
+
+const createEvent = (name, description, start, close_registration, location, max_attendees) => {
+    return fetch('http://localhost:3333/events', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': localStorage.getItem('session_token')
+        },
+        body: JSON.stringify({ name, description, start, close_registration, location, max_attendees})
+        })
+        .then((response) => {
+        if(response.status === 201){
+            return response.json();
+        }else if(response.status === 400){
+            throw "Bad Request";
+        }
+        else{
+            throw "Something went wrong";
+        }
+        })
+        .then((resJson) => {
+        window.location.href = '/';
+        return resJson;
+        })
+        .catch((error) => {
+        console.log("Err", error);
+        return Promise.reject(error);
+        })
+    }
+
+
 export const postService = {
-    getEvent,
     getUser,
     logout,
+    createUser,
+    createEvent
 }

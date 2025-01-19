@@ -4,10 +4,10 @@
             <h1>{{ event.name }}</h1>
         </div>
         <div class="event_info">
-            <p>{{ event.description }}</p>
-            <p>{{ event.date }}</p>
-            <p>{{ event.time }}</p>
-            <p>{{ event.location }}</p>
+            <p><strong>About: </strong><br/>{{ event.description }}</p>
+            <p>{{ event.date }}</p><br/>
+            <p>{{ event.time }}</p><br/>
+            <p><strong>Location: </strong> <br/>{{ event.location }}</p>
         </div>
     </div>
 </template>

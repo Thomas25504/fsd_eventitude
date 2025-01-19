@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Eventitude</h1>
+        <h1 class="title">Eventitude</h1>
         <div v-if="loading">Events Loading...</div>
 
         <div class="events" v-else>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import {postService} from "../../services/posts.service";
+    import {getService} from "../../services/get.service";
     import SingleEvent from "../components/SingleEvent.vue";
 
     export default {
@@ -25,7 +25,7 @@
         },
 
         mounted(){
-            postService.getEvent()
+            getService.getEvent()
                 .then(response => {
                     // handle successful response
                     console.log('Events fetched', response);
@@ -62,7 +62,13 @@
 
     .single:hover{
         opacity: 1;
+        cursor: pointer;
+        box-shadow:  0 0 10px #cfcfcf;
     }
 
+    .title{
+        color: rgb(0, 0, 0);
+        text-align: center;
+    }
     
 </style>
