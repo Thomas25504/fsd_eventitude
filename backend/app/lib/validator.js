@@ -24,12 +24,18 @@ const eventSchema = Joi.object({
     creator_id: Joi.number().integer()
 })
 
-const questionSchema = Joi.object({
-    event_id: Joi.number().integer().required(),
-    user_id: Joi.number().integer().required(),
-    content: Joi.string().required(),
-    vote: Joi.number().integer().required()
-}).unknown(false);
+const eventUpdateSchema = Joi.object({
+    name: Joi.string(),
+    description: Joi.string(),
+    location: Joi.string(),
+    start: Joi.date().min('now'),
+    close_registration: Joi.date().when('start', {
+        is: Joi.exist(),
+        then: Joi.date().max(Joi.ref('start')).min('now'),
+        otherwise: Joi.date().min('now')
+    }),
+    max_attendees: Joi.number().integer().min(1),
+})
 
 // Validate the user object
 const validateUser = (user) => {
@@ -62,21 +68,18 @@ const validateEvent = (event) => {
     }
 }
 
-
-const validateQuestion = (question) => {
-    if(questionSchema.validate(question).error){
-        return {error: questionSchema.validate(question).error};
+const ValidateEventUpdate = (event) => {
+    if(eventUpdateSchema.validate(event).error){
+        return {error: eventUpdateSchema.validate(event).error};
     }else{
         return {error: null};
     }
 }
- 
-
 
 // Export the module
 module.exports = {
     validateUser: validateUser,
     validateUserLogin: validateUserLogin,
     validateEvent: validateEvent,
-    validateQuestion: validateQuestion,
+    ValidateEventUpdate: ValidateEventUpdate
 };

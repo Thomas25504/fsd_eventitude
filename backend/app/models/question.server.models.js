@@ -10,9 +10,6 @@ const insert = function(question, done){
     });
 }
 
-const getIdParams = function(body){
-    return parseInt(body.question_id);
-}
 
 const getQuestionByID = function(id, done){
     db.get('SELECT * FROM questions WHERE question_id = ?', id, function(err, row){
@@ -25,6 +22,5 @@ const getQuestionByID = function(id, done){
 
 module.exports = {
     insert: insert,
-    getIdParams: getIdParams,
     getQuestionByID: getQuestionByID,
 };

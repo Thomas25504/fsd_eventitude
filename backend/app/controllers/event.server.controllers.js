@@ -38,22 +38,33 @@ const getEvent = (req, res) => {
 };
 
 const updateEvent = (req, res) => {
-    let event = Object.assign({}, req.body);
+    events.getEventByID(req.params.event_id, (err, row) => {
+        if(err){
+            return res.status(400).send({error_message: err});
+        }else if(!row){
+            return res.status(404).send({error_message: "Event not found"});
+        }else{
+            let event = Object.assign({}, req.body);
 
-    const {error} = validator.validateEvent(event);
+            const {error} = validator.ValidateEventUpdate(event);
     
-    if(error){
-        return res.status(400).json({error_message: error.details[0].message});
-    }else{
-        events.updateEvent(event, (err) => {
-            if(err){
-                return res.status(400).send({error_message: err});
-            }else{
-                return res.sendStatus(200);
+            if(error){
+                return res.status(400).json({error_message: error.details[0].message});
             }
-        });
-    }
-};
+    
+            else{
+                events.updateEvent(event, (err) => {
+                    if(err){
+                        return res.status(400).send({error_message: err});
+                    }else{
+                        return res.status(200).send(event);
+                    }
+                });
+            
+            }
+        }
+    });
+}
 
 const deleteEvent = (req, res) => {
     let id = parseInt(req.params.event_id);
@@ -72,11 +83,19 @@ const deleteEvent = (req, res) => {
 };
 
 const registerAttendee = (req, res) => {
-    return res.sendStatus(500);
+    return res.sendStatus(200);
 };
 
+
+
 const search = (req, res) => {
-    return res.sendStatus(500);
+    events.search((err, rows) => {
+        if(err){
+            return res.status(400).send({error_message: err});
+        }else{
+            return res.status(200).json(rows.slice(0, 20));
+        }
+    });
 };
 
 

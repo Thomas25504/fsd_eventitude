@@ -3,14 +3,9 @@
         <h1>Eventitude</h1>
         <div v-if="loading">Events Loading...</div>
 
-        <ul v-if="posts.length">
-            <li v-for="post in posts" :key="post.post_id">
-                <router-link :to="'/posts/' + post.post_id">
-                    {{  post.text }}
-                </router-link>
-
-            </li>
-        </ul>
+        <div class="events" v-else>
+            <SingleEvent class="single" v-for="post in posts" :key="post.id" :event="post"/>
+        </div>
 
         <div v-if="error">{{ error }}</div>
     </div>
@@ -18,6 +13,7 @@
 
 <script>
     import {postService} from "../../services/posts.service";
+    import SingleEvent from "../components/SingleEvent.vue";
 
     export default {
         data(){
@@ -30,13 +26,43 @@
 
         mounted(){
             postService.getEvent()
-                .then(posts => {
-                    this.posts = posts
-                    this.loading = false
+                .then(response => {
+                    // handle successful response
+                    console.log('Events fetched', response);
+                    this.posts = response;
+                    this.loading = false;
                 })
-                .catch(error => this.error = error);
+                .catch(error => {
+                    // handle error response
+                    console.error('Events fetch failed', error);
+                    this.error = 'Events fetch failed. Please try again.';
+                    this.loading = false;
+                });
+        },
+
+        components: {
+            SingleEvent
         }
 
     }
 
 </script>
+
+<style>
+    .events {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        
+    }
+
+    .single{
+        opacity: 0.93;
+    }
+
+    .single:hover{
+        opacity: 1;
+    }
+
+    
+</style>
